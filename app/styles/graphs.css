@@ -1,0 +1,14 @@
+/* graphs.css */
+
+.graph-container {
+
+    background: #111827;
+
+    border: 1px solid #1F2937;
+
+    border-radius: 12px;
+
+    padding: 15px;
+
+    margin-top: 15px;
+}

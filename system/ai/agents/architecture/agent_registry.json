@@ -1,0 +1,22 @@
+{
+  "state_analyst_agent": {
+    "type": "observer",
+    "input": [
+      "global_state.json"
+    ],
+    "output": [
+      "system_summary"
+    ]
+  },
+
+  "dependency_agent": {
+    "type": "reasoning",
+    "input": [
+      "global_state.json",
+      "dependency_graph.json"
+    ],
+    "output": [
+      "impact_analysis"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+    "health_check_interval_seconds": 60,
+
+    "enable_execution_tracing": true,
+
+    "enable_runtime_logging": true,
+
+    "enable_metrics_collection": true,
+
+    "max_log_retention_days": 30
+}

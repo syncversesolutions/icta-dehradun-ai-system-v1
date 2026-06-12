@@ -1,0 +1,15 @@
+{
+  "traffic": [
+    "journey_efficiency",
+    "congestion",
+    "throughput",
+    "traffic_volume",
+    "crowd_pressure"
+  ],
+  "accommodation": [
+    "occupancy_rate",
+    "capacity_utilization",
+    "booking_velocity",
+    "checkin_flow"
+]
+}

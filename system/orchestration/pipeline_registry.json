@@ -1,0 +1,55 @@
+{
+    "traffic": {
+
+        "ingestion":
+            "traffic_ingestion.ipynb",
+
+        "validation":
+            "traffic_validation.ipynb",
+
+        "kpi":
+            "traffic_kpi_engineering.ipynb",
+
+        "features":
+            "traffic_feature_engineering.ipynb",
+
+        "prediction":
+            "traffic_prediction.ipynb",
+
+        "signals":
+            "signal_generation.ipynb"
+    },
+
+    "accommodation": {
+
+        "ingestion":
+            "accommodation_ingestion.ipynb",
+
+        "validation":
+            "accommodation_validation.ipynb",
+
+        "kpi":
+            "accommodation_kpi_engineering.ipynb",
+
+        "features":
+            "accommodation_feature_engineering.ipynb",
+
+        "prediction":
+            "accommodation_prediction.ipynb",
+
+        "signals":
+            "accommodation_signal_generation.ipynb"
+    },
+
+    "system": {
+
+        "aggregation":
+            "aggregate.ipynb",
+
+        "impact_analysis":
+            "impact_analysis.ipynb",
+
+        "alert_tower":
+            "alert_tower.ipynb"
+    }
+}

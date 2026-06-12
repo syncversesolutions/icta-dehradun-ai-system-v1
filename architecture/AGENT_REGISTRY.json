@@ -1,0 +1,29 @@
+{
+    "state_analyst_agent": {
+        "type": "observer",
+        "enabled": true,
+        "priority": 1,
+        "module": "system.ai.agents.observer.state_analyst_agent"
+    },
+
+    "dependency_agent": {
+        "type": "reasoning",
+        "enabled": true,
+        "priority": 2,
+        "module": "system.ai.agents.reasoning.dependency_agent"
+    },
+
+    "recommendation_agent": {
+        "type": "recommendation",
+        "enabled": true,
+        "priority": 3,
+        "module": "system.ai.agents.recommendation.recommendation_agent"
+    },
+
+    "chief_orchestrator_agent": {
+        "type": "orchestration",
+        "enabled": true,
+        "priority": 4,
+        "module": "system.ai.agents.orchestration.chief_orchestrator_agent"
+    }
+}

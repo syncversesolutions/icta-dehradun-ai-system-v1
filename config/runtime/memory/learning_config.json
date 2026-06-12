@@ -1,0 +1,11 @@
+{
+    "enable_feedback_learning": true,
+
+    "enable_episode_storage": true,
+
+    "enable_semantic_updates": true,
+
+    "max_memory_history": 1000,
+
+    "learning_cycle_interval_minutes": 30
+}

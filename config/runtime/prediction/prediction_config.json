@@ -1,0 +1,11 @@
+{
+    "forecast_horizon_hours": 6,
+
+    "traffic_surge_threshold": 0.80,
+
+    "crowd_pressure_threshold": 0.75,
+
+    "medical_pressure_threshold": 0.70,
+
+    "enable_scenario_simulation": true
+}

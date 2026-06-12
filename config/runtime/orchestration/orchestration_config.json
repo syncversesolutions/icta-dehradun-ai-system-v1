@@ -1,0 +1,13 @@
+{
+    "enable_rerouting": true,
+
+    "enable_medical_escalation": true,
+
+    "enable_crowd_redistribution": true,
+
+    "enable_prediction_trigger": true,
+
+    "enable_autonomous_execution": true,
+
+    "max_parallel_workflows": 5
+}

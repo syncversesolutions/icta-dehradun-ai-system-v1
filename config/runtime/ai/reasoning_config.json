@@ -1,0 +1,11 @@
+{
+    "enable_graph_reasoning": true,
+
+    "enable_policy_reasoning": true,
+
+    "enable_semantic_reasoning": true,
+
+    "enable_recommendation_engine": true,
+
+    "max_reasoning_depth": 5
+}

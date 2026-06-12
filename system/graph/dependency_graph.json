@@ -1,0 +1,40 @@
+{
+  "traffic.congestion_score": {
+    "affects": [
+      "crowd.crowd_density",
+      "health.medical_incidents",
+      "tourism.route_efficiency"
+    ]
+  },
+
+  "traffic.predicted_risk_level": {
+    "affects": [
+      "system.alert_level",
+      "traffic.route_rerouting_score",
+      "governance.emergency_coordination"
+    ]
+  },
+  
+  "accommodation.occupancy_rate": {
+    "affects": [
+        "traffic.congestion_score",
+        "crowd.crowd_density",
+        "tourism.local_revenue"
+    ]
+},
+
+  "crowd.crowd_density": {
+    "affects": [
+      "traffic.congestion_score",
+      "health.medical_incidents",
+      "tourism.queue_delay"
+    ]
+  },
+
+  "health.medical_incidents": {
+    "affects": [
+      "system.alert_level",
+      "governance.emergency_response"
+    ]
+  }
+}

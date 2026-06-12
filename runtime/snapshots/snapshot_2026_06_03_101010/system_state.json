@@ -1,0 +1,28 @@
+{
+    "system_status": "active",
+
+    "risk_level": "low",
+
+    "active_alerts": [],
+
+    "critical_domains": [],
+
+    "active_workflows": [],
+
+    "last_pipeline_run": "2026-06-01 06:34:34.324769",
+
+    "domains_active": [
+        "traffic"
+    ],
+
+    "artifacts_generated": [
+        "validated_traffic.csv",
+        "traffic_kpi.csv",
+        "traffic_features.csv",
+        "traffic_predictions.csv",
+        "signals.json",
+        "all_signals.json",
+        "impact_analysis.json",
+        "active_alerts.json"
+    ]
+}
