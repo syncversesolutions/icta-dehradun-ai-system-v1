@@ -4,6 +4,10 @@ from pages.accommodation.services.accommodation_service import (
     AccommodationService
 )
 
+from components.graphs.dependency_graph import (
+    DependencyGraph
+)
+
 
 class AccommodationPage:
 
@@ -19,52 +23,226 @@ class AccommodationPage:
             "🏨 Accommodation Operations Center"
         )
 
+        st.caption(
+            "Accommodation intelligence and occupancy optimization"
+        )
+
         summary = (
             self.service.get_summary()
         )
 
-        col1, col2, col3, col4 = st.columns(4)
+        # =====================================
+        # EXECUTIVE KPIS
+        # =====================================
 
-        col1.metric(
-
-            "Properties",
-
-            summary[
-                "properties"
-            ]
+        col1, col2, col3, col4 = (
+            st.columns(4)
         )
 
-        col2.metric(
+        with col1:
 
-            "Accommodation Signals",
+            st.metric(
+                "Occupancy",
+                f"{summary['occupancy']}%"
+            )
 
-            summary[
-                "signals"
-            ]
-        )
+        with col2:
 
-        col3.metric(
+            st.metric(
+                "Available Beds",
+                summary[
+                    "available_beds"
+                ]
+            )
 
-            "Average Occupancy",
+        with col3:
 
-            summary[
-                "avg_occupancy"
-            ]
-        )
+            st.metric(
+                "Forecast 6h",
+                f"{summary['forecast']}%"
+            )
 
-        col4.metric(
+        with col4:
 
-            "High Risk Events",
+            st.metric(
+                "Signals",
+                summary[
+                    "signals"
+                ]
+            )
 
-            summary[
-                "high_risk"
-            ]
-        )
+        # =====================================
+        # EXECUTIVE ASSESSMENT
+        # =====================================
+
+        if summary["occupancy"] >= 90:
+
+            st.error(
+                "Accommodation network approaching saturation."
+            )
+
+        elif summary["occupancy"] >= 80:
+
+            st.warning(
+                "Accommodation pressure increasing."
+            )
+
+        else:
+
+            st.success(
+                "Accommodation capacity healthy."
+            )
+
+        if summary["forecast"] >= 95:
+
+            st.error(
+                "Forecast indicates accommodation saturation within 6 hours."
+            )
 
         st.divider()
 
+        # =====================================
+        # CAPACITY INTELLIGENCE
+        # =====================================
+
         st.subheader(
-            "Occupancy Predictions"
+            "Capacity Intelligence"
+        )
+
+        capacity = (
+            self.service
+            .get_capacity_summary()
+        )
+
+        if capacity:
+
+            c1, c2, c3, c4 = (
+                st.columns(4)
+            )
+
+            c1.metric(
+                "Total Rooms",
+                capacity[
+                    "total_rooms"
+                ]
+            )
+
+            c2.metric(
+                "Occupied Rooms",
+                capacity[
+                    "occupied_rooms"
+                ]
+            )
+
+            c3.metric(
+                "Average Occupancy",
+                f"{capacity['average_occupancy']}%"
+            )
+
+            c4.metric(
+                "Peak Occupancy",
+                f"{capacity['peak_occupancy']}%"
+            )
+
+        st.divider()
+
+        # =====================================
+        # SIGNAL INTELLIGENCE
+        # =====================================
+
+        st.subheader(
+            "Accommodation Signals"
+        )
+
+        signals = (
+            self.service.get_signals()
+        )
+
+        if not signals:
+
+            st.info(
+                "No accommodation signals found."
+            )
+
+        else:
+
+            for signal in signals:
+
+                signal_name = (
+                    signal.get(
+                        "signal",
+                        "unknown"
+                    )
+                )
+
+                value = (
+                    signal.get(
+                        "value",
+                        0
+                    )
+                )
+
+                status = (
+                    signal.get(
+                        "status",
+                        "normal"
+                    )
+                )
+
+                if status == "critical":
+
+                    st.error(
+                        f"{signal_name} | Value: {value}"
+                    )
+
+                elif status == "warning":
+
+                    st.warning(
+                        f"{signal_name} | Value: {value}"
+                    )
+
+                else:
+
+                    st.success(
+                        f"{signal_name} | Normal"
+                    )
+
+        st.divider()
+
+        # =====================================
+        # OPERATIONAL RECOMMENDATIONS
+        # =====================================
+
+        st.subheader(
+            "Operational Recommendations"
+        )
+
+        if summary["occupancy"] > 90:
+
+            st.warning(
+                "Prepare overflow accommodation capacity."
+            )
+
+            st.warning(
+                "Coordinate traffic rerouting strategy."
+            )
+
+            st.warning(
+                "Increase crowd monitoring readiness."
+            )
+
+            st.warning(
+                "Notify governance coordination team."
+            )
+
+        st.divider()
+
+        # =====================================
+        # FORECASTS
+        # =====================================
+
+        st.subheader(
+            "Occupancy Forecasts"
         )
 
         predictions = (
@@ -75,8 +253,8 @@ class AccommodationPage:
 
         if predictions.empty:
 
-            st.warning(
-                "No accommodation predictions found."
+            st.info(
+                "No forecast data available."
             )
 
         else:
@@ -90,37 +268,19 @@ class AccommodationPage:
 
         st.divider()
 
-        st.subheader(
-            "Accommodation Signals"
-        )
-
-        signals = (
-            self.service.get_signals()
-        )
-
-        if len(signals) == 0:
-
-            st.info(
-                "No active accommodation signals"
-            )
-
-        else:
-
-            st.json(
-                signals
-            )
-
-        st.divider()
+        # =====================================
+        # DEPENDENCY INTELLIGENCE
+        # =====================================
 
         st.subheader(
-            "Global System State"
+            "Accommodation Dependency Intelligence"
         )
 
-        state = summary.get(
-            "state",
-            {}
+        graph = (
+            self.service
+            .get_dependency_graph()
         )
 
-        st.json(
-            state
-        )
+        DependencyGraph(
+            graph
+        ).render()
