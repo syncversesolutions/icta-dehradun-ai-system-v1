@@ -9,7 +9,7 @@ class ForecastCard(BaseCard):
 
     def __init__(self):
 
-        super()._init_()
+        super().__init__()
 
     def render(
         self,

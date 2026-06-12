@@ -1,33 +1,35 @@
+# ============================================
+# IMPORTS
+# ============================================
+
 import streamlit as st
 
+from pages.intelligence_center.services.intelligence_center_service import (
+    IntelligenceCenterService
+)
 from components.widgets.executive_banner import (
     ExecutiveBanner
 )
 
-from components.widgets.section_header import (
-    SectionHeader
+from components.widgets.executive_kpi_strip import (
+    ExecutiveKPIStrip
+)
+
+from components.widgets.recommendation_panel import (
+    RecommendationPanel
+)
+
+from components.executive.executive_forecasts import (
+    ExecutiveForecasts
 )
 
 from components.graphs.dependency_graph import (
     DependencyGraph
 )
 
-from components.graphs.impact_graph import (
-    ImpactGraph
-)
-
-from components.graphs.signal_flow_graph import (
-    SignalFlowGraph
-)
-
-from components.graphs.domain_relationship_graph import (
-    DomainRelationshipGraph
-)
-
-from pages.intelligence_center.services.intelligence_center_service import (
-    IntelligenceCenterService
-)
-
+# ============================================
+# PAGE
+# ============================================
 
 class IntelligenceCenterPage:
 
@@ -37,88 +39,205 @@ class IntelligenceCenterPage:
             IntelligenceCenterService()
         )
 
-        self.banner = (
-            ExecutiveBanner()
+        self.snapshot = (
+            self.service
+            .get_intelligence_snapshot()
+        )
+    # ============================================
+    # DEPENDENCY GRAPH
+    # ============================================
+
+    def render_dependency_graph(
+        self
+    ):
+
+        st.subheader(
+            "Dependency Intelligence"
         )
 
-        self.section_header = (
-            SectionHeader()
+        graph_data = (
+            self.service
+            .get_dependency_graph()
         )
+
+        DependencyGraph(
+            graph_data
+        ).render()
+
+
+    # ============================================
+    # PAGE RENDER
+    # ============================================
 
     def render(self):
 
-        data = (
-            self.service.get_data()
-        )
-
-        summary = data.get(
-            "summary",
-            {}
-        )
-
-        signals = data.get(
-            "signals",
-            []
-        )
-
-        impacts = data.get(
-            "impacts",
-            []
-        )
-
-        dependencies = data.get(
-            "dependencies",
-            {}
-        )
-
-        # ==========================================
-        # BANNER
-        # ==========================================
-
-        self.banner.render(
+        ExecutiveBanner().render(
 
             title=
             "ICTA Intelligence Center",
 
             subtitle=
-            "Cross-Domain Dependency & Impact Intelligence"
+            "Cross-domain operational reasoning and intelligence"
+        )
+
+        ExecutiveKPIStrip().render(
+
+            self.service.get_kpis()
         )
 
         st.markdown("---")
 
-        # ==========================================
-        # EXECUTIVE INTELLIGENCE OVERVIEW
-        # ==========================================
+        self.render_signals()
 
-        self.section_header.render(
+        st.markdown("---")
 
-            "Intelligence Overview",
+        self.render_dependency_graph()
 
-            "Cross-domain intelligence derived from signals, impacts and dependencies."
+        st.markdown("---")
+
+        self.render_forecasts()
+
+        st.markdown("---")
+
+        self.render_scenarios()
+
+        st.markdown("---")
+
+        self.render_recommendations()
+
+    # ============================================
+    # EXECUTIVE ASSESSMENT
+    # ============================================
+
+    def render_executive_assessment(
+        self
+    ):
+
+        st.subheader(
+            "Executive Assessment"
         )
 
-        col1, col2, col3, col4 = st.columns(4)
+        col1, col2, col3 = (
+            st.columns(3)
+        )
 
         with col1:
 
             st.metric(
+                "Risk Level",
+                self.snapshot.get(
+                    "risk_level",
+                    "unknown"
+                ).upper()
+            )
 
-                "Signals",
+        with col2:
 
+            st.metric(
+                "System Status",
+                self.snapshot.get(
+                    "system_status",
+                    "unknown"
+                ).upper()
+            )
+
+        with col3:
+
+            st.metric(
+                "Critical Domains",
+                len(
+                    self.snapshot.get(
+                        "critical_domains",
+                        []
+                    )
+                )
+            )
+
+        observations = (
+            self.snapshot.get(
+                "observations",
+                []
+            )
+        )
+
+        for observation in observations:
+
+            st.warning(
+                observation
+            )
+
+    # ============================================
+    # SIGNALS
+    # ============================================
+
+    def render_signals(
+        self
+    ):
+
+        st.subheader(
+            "Signal Intelligence"
+        )
+
+        signals = (
+            self.snapshot.get(
+                "signals",
+                []
+            )
+        )
+
+        if not signals:
+
+            st.info(
+                "No active signals detected."
+            )
+
+            return
+
+        for signal in signals:
+
+            st.success(
+                signal
+            )
+
+    # ============================================
+    # IMPACT SUMMARY
+    # ============================================
+
+    def render_impact_summary(
+        self
+    ):
+
+        st.subheader(
+            "Impact Intelligence"
+        )
+
+        summary = (
+            self.snapshot.get(
+                "impact_summary",
+                {}
+            )
+        )
+
+        col1, col2, col3 = (
+            st.columns(3)
+        )
+
+        with col1:
+
+            st.metric(
+                "Impact Records",
                 summary.get(
-                    "signal_count",
-                    len(signals)
+                    "impact_count",
+                    0
                 )
             )
 
         with col2:
 
             st.metric(
-
-                "High Risk",
-
+                "Affected Domains",
                 summary.get(
-                    "high_risk_count",
+                    "affected_domain_count",
                     0
                 )
             )
@@ -126,117 +245,153 @@ class IntelligenceCenterPage:
         with col3:
 
             st.metric(
-
-                "Impacts",
-
+                "Risk Checkpoints",
                 summary.get(
-                    "impact_count",
-                    len(impacts)
+                    "high_risk_checkpoint_count",
+                    0
                 )
             )
 
-        with col4:
+        st.markdown(
+            "### Affected Domains"
+        )
 
-            st.metric(
+        for domain in summary.get(
+            "affected_domains",
+            []
+        ):
 
-                "Dependencies",
-
-                summary.get(
-                    "dependency_count",
-                    len(dependencies)
-                )
+            st.write(
+                f"• {domain}"
             )
 
-        st.markdown("---")
-
-        # ==========================================
-        # AI INTELLIGENCE BRIEF
-        # ==========================================
-
-        self.section_header.render(
-
-            "Intelligence Brief",
-
-            "AI-generated interpretation of active operational intelligence."
+        st.markdown(
+            "### High Risk Checkpoints"
         )
 
-        highest_location = summary.get(
-            "highest_risk_location",
-            "Unknown"
+        for checkpoint in summary.get(
+            "high_risk_checkpoints",
+            []
+        ):
+
+            st.write(
+                f"• {checkpoint}"
+            )
+
+    # ============================================
+    # FORECASTS
+    # ============================================
+
+    def render_forecasts(
+        self
+    ):
+
+        st.subheader(
+            "Forecast Intelligence"
         )
 
-        highest_score = summary.get(
-            "highest_risk_score",
-            0
+        forecasts = (
+            self.snapshot.get(
+                "forecasts",
+                []
+            )
         )
 
-       
+        if not forecasts:
 
-        # ==========================================
-        # SIGNAL INTELLIGENCE
-        # ==========================================
+            st.info(
+                "No forecasts available."
+            )
 
-        self.section_header.render(
+            return
 
-            "Signal Intelligence",
-
-            "High-risk signals detected across operational domains."
+        ExecutiveForecasts().render(
+            forecasts
         )
 
-        SignalFlowGraph().render(
-            signals
+    # ============================================
+    # SCENARIOS
+    # ============================================
+
+    def render_scenarios(
+        self
+    ):
+
+        st.subheader(
+            "Scenario Intelligence"
         )
 
-        st.markdown("---")
-
-        # ==========================================
-        # DEPENDENCY INTELLIGENCE
-        # ==========================================
-
-        self.section_header.render(
-
-            "Dependency Intelligence",
-
-            "Cause-and-effect relationships across operational domains."
+        scenarios = (
+            self.snapshot.get(
+                "scenarios",
+                []
+            )
         )
 
-        DependencyGraph(
+        if not scenarios:
 
-            relationships=
-            dependencies
+            st.info(
+                "No scenarios available."
+            )
 
-        ).render()
+            return
 
-        st.markdown("---")
+        cols = st.columns(3)
 
-        # ==========================================
-        # IMPACT INTELLIGENCE
-        # ==========================================
+        for i, scenario in enumerate(
+            scenarios
+        ):
 
-        self.section_header.render(
+            with cols[
+                i % 3
+            ]:
 
-            "Impact Intelligence",
+                st.info(
 
-            "Projected downstream impacts from current operational conditions."
+                    f"Scenario: "
+                    f"{scenario.get('scenario')}\n\n"
+
+                    f"Trigger: "
+                    f"{scenario.get('trigger')}\n\n"
+
+                    f"Response: "
+                    f"{scenario.get('response')}"
+                )
+
+    # ============================================
+    # RECOMMENDATIONS
+    # ============================================
+
+    def render_recommendations(
+        self
+    ):
+
+        recommendations = []
+
+        for rec in self.snapshot.get(
+            "recommendations",
+            []
+        ):
+
+            recommendations.append(
+
+                f"[{rec['priority'].upper()}] "
+                f"{rec['domain'].upper()} - "
+                f"{rec['action']}"
+            )
+
+        RecommendationPanel().render(
+            recommendations
         )
 
-        ImpactGraph().render(
-            impacts
-        )
+# ============================================
+# ENTRY POINT
+# ============================================
 
-        st.markdown("---")
+def render():
 
-        # ==========================================
-        # DOMAIN RELATIONSHIPS
-        # ==========================================
+    page = (
+        IntelligenceCenterPage()
+    )
 
-        self.section_header.render(
-
-            "Domain Relationships",
-
-            "Inter-domain connectivity and influence network."
-        )
-
-        DomainRelationshipGraph().render(
-            impacts
-        )
+    page.render()

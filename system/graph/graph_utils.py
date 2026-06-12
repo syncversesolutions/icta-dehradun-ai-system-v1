@@ -24,22 +24,18 @@ def load_graph(graph_path):
 # ============================================
 
 def get_downstream_impacts(
-
     graph,
     domain,
     metric
 ):
 
+    graph_key = f"{domain}.{metric}"
+
     try:
 
-        impacts = (
-
-            graph[domain]
-            [metric]
-            ["affects"]
-        )
-
-        return impacts
+        return graph[
+            graph_key
+        ]["affects"]
 
     except KeyError:
 
